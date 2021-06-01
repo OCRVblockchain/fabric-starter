@@ -39,8 +39,8 @@ services:
       - 7053:7053
     volumes:
       #- /home/user/example/crypto-config/channel:/etc/hyperledger/configtx
-      - /home/user/example/config-rzd2/crypto-config/ordererOrganizations/rails.rzd/orderers/orderer.rails.rzd/msp:/var/hyperledger/orderer/msp
-      - /home/user/example/config-rzd2/crypto-config/ordererOrganizations/rails.rzd/orderers/orderer.rails.rzd/tls:/var/hyperledger/orderer/tls
+      - /home/user/example/config-rzd2/crypto-config/ordererOrganizations/rails.rzd/orderers/orderer.rzd2.rails.rzd/msp:/var/hyperledger/orderer/msp
+      - /home/user/example/config-rzd2/crypto-config/ordererOrganizations/rails.rzd/orderers/orderer.rzd2.rails.rzd/tls:/var/hyperledger/orderer/tls
       - orderer.rzd2.rails.rzd:/var/hyperledger/production/orderer
     extra_hosts:
       - orderer.rzd.rails.rzd:142.93.139.226
