@@ -20,7 +20,7 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: ordererOrganizations/rzd.rails.rzd/msp
+        MSPDir: ordererOrganizations/rails.rzd/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -260,12 +260,12 @@ Orderer: &OrdererDefaults
         Consenters:
             - Host: orderer.rzd.rails.rzd
               Port: 7050
-              ClientTLSCert: ordererOrganizations/rzd.rails.rzd/orderers/orderer.rzd.rails.rzd/tls/server.crt
-              ServerTLSCert: ordererOrganizations/rzd.rails.rzd/orderers/orderer.rzd.rails.rzd/tls/server.crt
+              ClientTLSCert: ordererOrganizations/rails.rzd/orderers/orderer.rzd.rails.rzd/tls/server.crt
+              ServerTLSCert: ordererOrganizations/rails.rzd/orderers/orderer.rzd.rails.rzd/tls/server.crt
             - Host: orderer.rzd2.rails.rzd
               Port: 7050
-              ClientTLSCert: ordererOrganizations/rzd2.rails.rzd/orderers/orderer.rzd2.rails.rzd/tls/server.crt
-              ServerTLSCert: ordererOrganizations/rzd2.rails.rzd/orderers/orderer.rzd2.rails.rzd/tls/server.crt
+              ClientTLSCert: ordererOrganizations/rails.rzd/orderers/orderer.rzd2.rails.rzd/tls/server.crt
+              ServerTLSCert: ordererOrganizations/rails.rzd/orderers/orderer.rzd2.rails.rzd/tls/server.crt
 #            - Host: orderer3.rails.rzd
 #              Port: 7050
 #              ClientTLSCert: ordererOrganizations/rails.rzd/orderers/orderer3.rails.rzd/tls/server.crt
