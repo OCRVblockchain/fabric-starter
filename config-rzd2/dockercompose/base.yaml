@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  peer-base:
+    image: hyperledger/fabric-peer:latest
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.rzd2.rails.rzd:5984
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+      - /var/run/:/host/var/run/
+    restart: always
