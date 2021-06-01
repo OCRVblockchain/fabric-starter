@@ -1,0 +1,39 @@
+mkdir -p crypto-config/ordererOrganizations/${domain}/
+export FABRIC_CA_CLIENT_HOME=${PWD}/crypto-config/ordererOrganizations/${domain}
+
+fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --caname ca-orderer --tls.certfiles "${PWD}/crypto-config/fabric-ca/orderer/tls-cert.pem"
+
+mkdir -p ${PWD}/crypto-config/ordererOrganizations/${domain}/msp
+echo 'NodeOUs:
+  Enable: true
+  ClientOUIdentifier:
+    Certificate: cacerts/localhost-7054-ca-orderer.pem
+    OrganizationalUnitIdentifier: client
+  PeerOUIdentifier:
+    Certificate: cacerts/localhost-7054-ca-orderer.pem
+    OrganizationalUnitIdentifier: peer
+  AdminOUIdentifier:
+    Certificate: cacerts/localhost-7054-ca-orderer.pem
+    OrganizationalUnitIdentifier: admin
+  OrdererOUIdentifier:
+    Certificate: cacerts/localhost-7054-ca-orderer.pem
+    OrganizationalUnitIdentifier: orderer' > "${PWD}/crypto-config/ordererOrganizations/${domain}/msp/config.yaml"
+
+fabric-ca-client register --caname ca-orderer --id.name orderer --id.secret ordererpw --id.type orderer --tls.certfiles "${PWD}/crypto-config/fabric-ca/orderer/tls-cert.pem"
+fabric-ca-client register --caname ca-orderer --id.name ordererAdmin --id.secret ordererAdminpw --id.type admin --tls.certfiles "${PWD}/crypto-config/fabric-ca/orderer/tls-cert.pem"
+
+fabric-ca-client enroll -u https://orderer:ordererpw@localhost:7054 --caname ca-orderer -M "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/msp" --csr.hosts orderer.${org}.${domain} --csr.hosts localhost --tls.certfiles "${PWD}/crypto-config/fabric-ca/orderer/tls-cert.pem"
+cp "${PWD}/crypto-config/ordererOrganizations/${domain}/msp/config.yaml" "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/msp/config.yaml"
+
+fabric-ca-client enroll -u https://orderer:ordererpw@localhost:7054 --caname ca-orderer -M "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls" --enrollment.profile tls --csr.hosts orderer.${org}.${domain} --csr.hosts localhost --tls.certfiles "${PWD}/crypto-config/fabric-ca/orderer/tls-cert.pem"
+cp "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/tlscacerts/"* "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/ca.crt"
+cp "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/signcerts/"* "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/server.crt"
+cp "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/keystore/"* "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/server.key"
+
+mkdir -p "${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/msp/tlscacerts"
+sudo cp ${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/tlscacerts/* ${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/msp/tlscacerts/tlsca.${domain}-cert.pem
+mkdir -p "${PWD}/crypto-config/ordererOrganizations/${domain}/msp/tlscacerts"
+sudo cp ${PWD}/crypto-config/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls/tlscacerts/* ${PWD}/crypto-config/ordererOrganizations/${domain}/msp/tlscacerts/tlsca.${domain}-cert.pem
+
+fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@localhost:7054 --caname ca-orderer -M "${PWD}/crypto-config/ordererOrganizations/${domain}/users/Admin@${domain}/msp" --tls.certfiles "${PWD}/crypto-config/fabric-ca/orderer/tls-cert.pem"
+cp "${PWD}/crypto-config/ordererOrganizations/${domain}/msp/config.yaml" "${PWD}/crypto-config/ordererOrganizations/${domain}/users/Admin@${domain}/msp/config.yaml"
