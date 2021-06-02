@@ -2,8 +2,8 @@ version: '2'
 
 services:
 
-  peer0.rzd.rails.rzd:
-    container_name: peer0.rzd.rails.rzd
+  peer0.${org}.${domain}:
+    container_name: peer0.${org}.${domain}
     extends:
       file: base.yaml
       service: peer-base
@@ -18,30 +18,30 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Peer specific variabes
-      - CORE_PEER_ID=peer0.rzd.rails.rzd
-      - CORE_PEER_ADDRESS=peer0.rzd.rails.rzd:7051
+      - CORE_PEER_ID=peer0.${org}.${domain}
+      - CORE_PEER_ADDRESS=peer0.${org}.${domain}:7051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.rzd.rails.rzd:7052
+      - CORE_PEER_CHAINCODEADDRESS=peer0.${org}.${domain}:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.rzd.rails.rzd:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.rzd.rails.rzd:7051
-      - CORE_PEER_LOCALMSPID=rzdMSP
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.${org}.${domain}:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.${org}.${domain}:7051
+      - CORE_PEER_LOCALMSPID=${org}MSP
     ports:
       - 7051:7051
     volumes:
       - /var/run/:/host/var/run/
-      - /home/user/example/config-rzd/crypto-config/peerOrganizations/rzd.rails.rzd/peers/peer0.rzd.rails.rzd/msp:/etc/hyperledger/fabric/msp
-      - /home/user/example/config-rzd/crypto-config/peerOrganizations/rzd.rails.rzd/peers/peer0.rzd.rails.rzd/tls:/etc/hyperledger/fabric/tls
+      - ../organizations/peerOrganizations/${org}.${domain}/peers/peer0.${org}.${domain}/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/${org}.${domain}/peers/peer0.${org}.${domain}/tls:/etc/hyperledger/fabric/tls
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
-    extra_hosts:
-      -  orderer2.rails.rzd:142.93.131.114
-      -  peer0.rzd2.rails.rzd:142.93.131.114
-      -  orderer3.rails.rzd:142.93.131.119
-      -  peer0.rzd3.rails.rzd:142.93.131.119
+    # extra_hosts:
+    #   -  orderer2.rails.rzd:142.93.131.114
+    #   -  peer0.rzd2.rails.rzd:142.93.131.114
+    #   -  orderer3.rails.rzd:142.93.131.119
+    #   -  peer0.rzd3.rails.rzd:142.93.131.119
 
-  couchdb.rzd.rails.rzd:
-    container_name: couchdb.rzd.rails.rzd
+  couchdb.${org}.${domain}:
+    container_name: couchdb.${org}.${domain}
     image: hyperledger/fabric-couchdb:latest
     restart: always
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -53,4 +53,3 @@ services:
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
       - 5984:5984
-

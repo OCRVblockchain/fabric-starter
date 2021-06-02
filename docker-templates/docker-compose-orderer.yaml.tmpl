@@ -1,11 +1,11 @@
 version: '2'
 
 volumes:
-  orderer.rzd.rails.rzd:
+  orderer.${org}.${domain}:
 
 services:
-  orderer.rzd.rails.rzd:
-    container_name: orderer.rzd.rails.rzd
+  orderer.${org}.${domain}:
+    container_name: orderer.${org}.${domain}
     restart: always
     image: hyperledger/fabric-orderer:latest
     environment:
@@ -38,9 +38,8 @@ services:
       - 7050:7050
       - 7053:7053
     volumes:
-      #- /home/user/example/crypto-config/channel:/etc/hyperledger/configtx
-      - /home/user/example/config-rzd/crypto-config/ordererOrganizations/rails.rzd/orderers/orderer.rzd.rails.rzd/msp:/var/hyperledger/orderer/msp
-      - /home/user/example/config-rzd/crypto-config/ordererOrganizations/rails.rzd/orderers/orderer.rzd.rails.rzd/tls:/var/hyperledger/orderer/tls
-      - orderer.rzd.rails.rzd:/var/hyperledger/production/orderer
-    extra_hosts:
-      - orderer.rzd2.rails.rzd:142.93.131.114
+      - ../organizations/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/${domain}/orderers/orderer.${org}.${domain}/tls:/var/hyperledger/orderer/tls
+      - orderer.${org}.${domain}:/var/hyperledger/production/orderer
+    # extra_hosts:
+    #   - orderer.rzd2.rails.rzd:142.93.131.114
